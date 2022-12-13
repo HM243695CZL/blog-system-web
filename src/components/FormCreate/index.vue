@@ -7,7 +7,7 @@
 </template>
 
 <script lang='ts' setup>
-	import { reactive } from 'vue';
+import { reactive } from 'vue';
 
 	const props = defineProps({
 		formConfig: {
@@ -17,7 +17,19 @@
 	});
 	const state = reactive({
 		value: {},
-		fApi: {},
-		options: {}
+		fApi: {} as any,
+		options: {
+			submitBtn: false,
+		},
 	});
+	defineExpose({
+		state
+	})
 </script>
+<style lang='scss' scoped>
+	.form-create-container{
+		:deep(.el-col-24){
+			margin-bottom: 30px;
+		}
+	}
+</style>

@@ -25,37 +25,55 @@
 			<vxe-column title='专栏简介' field='desc' />
 			<vxe-column title='博客数量' field='number' />
 			<vxe-column title='添加时间' field='addTime' />
+			<vxe-column title="操作" width="200">
+				<template #default="scope">
+					<el-button size='small' type='default' @click="clickEdit(scope.row.id)">修改</el-button>
+					<el-button size='small' type='danger' @click="clickDelete(scope.row.id)">删除</el-button>
+				</template>
+			</vxe-column>
 		</vxe-table>
 		<PaginationCommon
 			:page-info='pageInfo'
 			@changePageSize='changePageSize'
 			@changePageIndex='changePageIndex'
 		/>
-		<TypeModal
+		<CommonModal
 			ref='modalFormRef'
-			@refreshList="getDataList"
-			:form-config='formConfig'
-		/>
+			:title='configObj.title'
+			:create-path='configObj.createPath'
+			:update-path='configObj.updatePath'
+			:view-path='configObj.viewPath'
+			@refreshList='getDataList'
+		>
+			<FormCreate
+				ref='formCreateRef'
+				:form-config='formConfig'
+			/>
+		</CommonModal>
 	</div>
 </template>
 
 <script lang='ts'>
 import CommonTop from '/@/components/CommonTop/index.vue';
+import CommonModal from '/@/components/CommonModal/index.vue';
+import FormCreate from '/@/components/FormCreate/index.vue';
 import PaginationCommon from '/@/components/PaginationCommon/index.vue';
 import { onMounted, reactive, ref, toRefs } from 'vue';
-import { deleteBlogTypeApi, getBlogTypePageApi } from '/@/api/blog/type';
+import { createBlogTypeApi, deleteBlogTypeApi,
+	getBlogTypePageApi, updateBlogTypeApi, viewBlogTypeApi
+} from '/@/api/blog/type';
 import { getConfigApi } from '/@/api/system/form-designer';
 import useCrud from '/@/hooks/useCrud';
 import { postAction } from '/@/api/common';
 import { StatusEnum } from '/@/common/status.enum';
-import TypeModal from './component/type/typeModal.vue';
 
 export default {
 	name: 'blogType',
 	components: {
 		CommonTop,
+		CommonModal,
 		PaginationCommon,
-		TypeModal
+		FormCreate
 	},
 	setup() {
 		const blogTypeRef = ref();
@@ -64,7 +82,13 @@ export default {
 				page: getBlogTypePageApi,
 				delete: deleteBlogTypeApi
 			},
-			formConfig: {}
+			formConfig: {},
+			configObj: {
+				title: '分类',
+				createPath: createBlogTypeApi,
+				updatePath: updateBlogTypeApi,
+				viewPath: viewBlogTypeApi
+			}
 		});
 		const getFormConfig = () => {
 			postAction(getConfigApi, {
@@ -78,6 +102,7 @@ export default {
 		const {
 			tableRef,
 			modalFormRef,
+			formCreateRef,
 			pageInfo,
 			dataList,
 			tableHeight,
@@ -103,6 +128,7 @@ export default {
 
 			tableRef,
 			modalFormRef,
+			formCreateRef,
 			pageInfo,
 			dataList,
 			tableHeight,
