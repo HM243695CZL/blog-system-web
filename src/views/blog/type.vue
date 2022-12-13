@@ -34,6 +34,7 @@
 		<TypeModal
 			ref='modalFormRef'
 			@refreshList="getDataList"
+			:form-config='formConfig'
 		/>
 	</div>
 </template>
@@ -47,7 +48,7 @@ import { getConfigApi } from '/@/api/system/form-designer';
 import useCrud from '/@/hooks/useCrud';
 import { postAction } from '/@/api/common';
 import { StatusEnum } from '/@/common/status.enum';
-import TypeModal from './component/typeModal.vue';
+import TypeModal from './component/type/typeModal.vue';
 
 export default {
 	name: 'blogType',
@@ -69,8 +70,8 @@ export default {
 			postAction(getConfigApi, {
 				key: 'BlogTypeKey'
 			}).then(res => {
-				if (res.state === StatusEnum.SUCCESS) {
-					state.formConfig = res.data.config;
+				if (res.status === StatusEnum.SUCCESS) {
+					state.formConfig = JSON.parse(res.data.config);
 				}
 			})
 		}

@@ -4,6 +4,9 @@
 							 :close-on-click-modal='false'
 							 :title='state.title'
 							 v-model='state.isShowDialog' width='600px'>
+			<form-create v-model="state.value" :rule="props.formConfig"
+									 :option='state.options'
+									 v-model:api="state.fApi"/>
 			<template #footer>
 				<div class='dialog-footer'>
 					<el-button @click='closeDialog'>取 消</el-button>
@@ -17,13 +20,25 @@
 <script lang='ts' setup>
 	import { reactive } from 'vue';
 
+	const props = defineProps({
+		formConfig: {
+			type: Object,
+			required: true
+		}
+	});
+
 	const emits = defineEmits([
 		'refreshList'
 	]);
 
 	const state = reactive({
 		isShowDialog: false,
-		title: '新增分类'
+		title: '新增分类',
+		fApi: {} as any,
+		value: {},
+		options: {
+			submitBtn: false
+		}
 	});
 	const openDialog = () => {
 		state.isShowDialog = true;
@@ -32,7 +47,9 @@
 		state.isShowDialog = false;
 	};
 	const clickConfirm = () => {
-
+		state.fApi.submit(formData => {
+			console.log(formData);
+		})
 	};
 	defineExpose({
 		openDialog
