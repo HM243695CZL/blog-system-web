@@ -1,13 +1,13 @@
 <template>
-	<div class='blog-type-container h100' ref='blogTypeRef'>
+	<div class='blog-type-container h100' ref='blogTagRef'>
 		<CommonTop
 			@clickSearch="clickSearch"
 			@clickReset="clickReset"
 			@clickAdd="clickAdd"
 		>
 			<template #left>
-				<el-form-item label="专栏名称">
-					<el-input v-model="searchParams.name" placeholder="请输入专栏名称" clearable></el-input>
+				<el-form-item label="标签名称">
+					<el-input v-model="searchParams.name" placeholder="请输入标签名称" clearable></el-input>
 				</el-form-item>
 			</template>
 		</CommonTop>
@@ -21,8 +21,7 @@
 			:max-height='tableHeight'
 		>
 			<vxe-column type='seq' title='序号' width='60' />
-			<vxe-column title='专栏名称' field='name' />
-			<vxe-column title='专栏简介' field='desc' />
+			<vxe-column title='标签名称' field='name' />
 			<vxe-column title='博客数量' field='number' />
 			<vxe-column title='更新时间' field='updateTime' />
 			<vxe-column title="操作" width="200">
@@ -59,16 +58,15 @@ import CommonModal from '/@/components/CommonModal/index.vue';
 import FormCreate from '/@/components/FormCreate/index.vue';
 import PaginationCommon from '/@/components/PaginationCommon/index.vue';
 import { onMounted, reactive, ref, toRefs } from 'vue';
-import { createBlogTypeApi, deleteBlogTypeApi,
-	getBlogTypePageApi, updateBlogTypeApi, viewBlogTypeApi
-} from '/@/api/blog/type';
-import { getConfigApi } from '/@/api/system/form-designer';
+import { createTagApi, deleteTagApi,
+	getTagPageApi, updateTagApi, viewTagApi } from '/@/api/blog/tag';
 import useCrud from '/@/hooks/useCrud';
 import { postAction } from '/@/api/common';
+import { getConfigApi } from '/@/api/system/form-designer';
 import { StatusEnum } from '/@/common/status.enum';
 
 export default {
-	name: 'blogType',
+	name: 'blogTag',
 	components: {
 		CommonTop,
 		CommonModal,
@@ -76,23 +74,23 @@ export default {
 		FormCreate
 	},
 	setup() {
-		const blogTypeRef = ref();
+		const blogTagRef = ref();
 		const state = reactive({
 			uris: {
-				page: getBlogTypePageApi,
-				delete: deleteBlogTypeApi
+				page: getTagPageApi,
+				delete: deleteTagApi
 			},
 			formConfig: {},
 			configObj: {
-				title: '分类',
-				createPath: createBlogTypeApi,
-				updatePath: updateBlogTypeApi,
-				viewPath: viewBlogTypeApi
+				title: '标签',
+				createPath: createTagApi,
+				updatePath: updateTagApi,
+				viewPath: viewTagApi
 			}
 		});
 		const getFormConfig = () => {
 			postAction(getConfigApi, {
-				key: 'BlogTypeKey'
+				key: 'BlogTagKey'
 			}).then(res => {
 				if (res.status === StatusEnum.SUCCESS) {
 					state.formConfig = JSON.parse(res.data.config);
@@ -117,13 +115,13 @@ export default {
 			changePageSize
 		} = useCrud({
 			uris: state.uris,
-			parentRef: blogTypeRef
+			parentRef: blogTagRef
 		});
 		onMounted(() => {
 			getFormConfig();
 		});
 		return {
-			blogTypeRef,
+			blogTagRef,
 			...toRefs(state),
 
 			tableRef,
@@ -147,8 +145,8 @@ export default {
 </script>
 
 <style scoped lang='scss'>
-	.blog-type-container{
-		padding: 20px;
-		overflow: auto;
-	}
+.blog-type-container{
+	padding: 20px;
+	overflow: auto;
+}
 </style>
