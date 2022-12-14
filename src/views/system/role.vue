@@ -48,10 +48,16 @@
         @changePageSize='changePageSize'
         @changePageIndex='changePageIndex'
     />
-    <RoleModal
-      ref="modalFormRef"
-      @refreshList="getDataList"
-    />
+		<CommonModal
+			ref='modalFormRef'
+			:title='configObj.title'
+			:create-path='configObj.createPath'
+			:update-path='configObj.updatePath'
+			:view-path='configObj.viewPath'
+			@refreshList='getDataList'
+		>
+			<RoleModal ref='childRef' />
+		</CommonModal>
     <AuthModal
       ref="authModalRef"
       :menu-list="menuList"
@@ -62,9 +68,11 @@
 <script lang="ts">
 
 import {onMounted, reactive, ref, toRefs} from 'vue';
-import {deleteRoleApi, getRolePageApi} from '/@/api/system/role';
+import { createRoleApi, deleteRoleApi,
+	getRolePageApi, updateRoleApi, viewRoleApi } from '/@/api/system/role';
 import useCrud from '/@/hooks/useCrud';
 import CommonTop from '/@/components/CommonTop/index.vue';
+import CommonModal from '/@/components/CommonModal/index.vue';
 import PaginationCommon from '/@/components/PaginationCommon/index.vue';
 import RoleModal from './component/role/roleModal.vue';
 import AuthModal from './component/role/authModal.vue';
@@ -77,7 +85,8 @@ export default {
   components: {
     CommonTop,
     PaginationCommon,
-    RoleModal,
+		CommonModal,
+		RoleModal,
     AuthModal
   },
   setup() {
@@ -88,11 +97,18 @@ export default {
         page: getRolePageApi,
         delete: deleteRoleApi
       },
-      menuList: []
+      menuList: [],
+			configObj: {
+				title: '博客',
+				createPath: createRoleApi,
+				updatePath: updateRoleApi,
+				viewPath: viewRoleApi
+			},
     });
     const {
       tableRef,
       modalFormRef,
+			childRef,
       pageInfo,
       dataList,
       tableHeight,
@@ -130,6 +146,7 @@ export default {
 
       tableRef,
       modalFormRef,
+			childRef,
       pageInfo,
       dataList,
       tableHeight,

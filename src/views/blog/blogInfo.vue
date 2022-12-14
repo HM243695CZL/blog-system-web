@@ -1,13 +1,13 @@
 <template>
-	<div class='blog-type-container h100' ref='blogTypeRef'>
+	<div class='blog-info-container h100' ref='blogInfoRef'>
 		<CommonTop
 			@clickSearch="clickSearch"
 			@clickReset="clickReset"
 			@clickAdd="clickAdd"
 		>
 			<template #left>
-				<el-form-item label="专栏名称">
-					<el-input v-model="searchParams.name" placeholder="请输入专栏名称" clearable></el-input>
+				<el-form-item label="标题">
+					<el-input v-model="searchParams.title" placeholder="请输入" clearable></el-input>
 				</el-form-item>
 			</template>
 		</CommonTop>
@@ -21,10 +21,10 @@
 			:max-height='tableHeight'
 		>
 			<vxe-column type='seq' title='序号' width='60' />
-			<vxe-column title='专栏名称' field='name' />
-			<vxe-column title='专栏简介' field='desc' />
-			<vxe-column title='博客数量' field='number' />
+			<vxe-column title='标题' field='title' />
+			<vxe-column title='分类' field='type' />
 			<vxe-column title='更新时间' field='updateTime' />
+			<vxe-column title='状态' field='state' />
 			<vxe-column title="操作" width="200">
 				<template #default="scope">
 					<el-button size='small' type='default' @click="clickEdit(scope.row.id)">修改</el-button>
@@ -45,64 +45,47 @@
 			:view-path='configObj.viewPath'
 			@refreshList='getDataList'
 		>
-			<FormCreate
-				ref='formCreateRef'
-				:form-config='formConfig'
-			/>
+			<BlogInfoModal ref='childRef' />
 		</CommonModal>
 	</div>
 </template>
 
 <script lang='ts'>
 import CommonTop from '/@/components/CommonTop/index.vue';
-import CommonModal from '/@/components/CommonFormCreateModal/index.vue';
-import FormCreate from '/@/components/FormCreate/index.vue';
 import PaginationCommon from '/@/components/PaginationCommon/index.vue';
-import { onMounted, reactive, ref, toRefs } from 'vue';
-import { createBlogTypeApi, deleteBlogTypeApi,
-	getBlogTypePageApi, updateBlogTypeApi, viewBlogTypeApi
-} from '/@/api/blog/type';
-import { getConfigApi } from '/@/api/system/form-designer';
+import CommonModal from '/@/components/CommonModal/index.vue';
+import BlogInfoModal from './component/blogInfoModal.vue';
+import { reactive, ref, toRefs } from 'vue';
+import { createBlogInfoApi, deleteBlogInfoApi,
+	getBlogInfoPageApi, updateBlogInfoApi, viewBlogInfoApi } from '/@/api/blog/blogInfo';
 import useCrud from '/@/hooks/useCrud';
-import { postAction } from '/@/api/common';
-import { StatusEnum } from '/@/common/status.enum';
-
 export default {
-	name: 'blogType',
+	name: 'blogInfo',
 	components: {
 		CommonTop,
-		CommonModal,
 		PaginationCommon,
-		FormCreate
+		CommonModal,
+		BlogInfoModal
 	},
 	setup() {
-		const blogTypeRef = ref();
+		const blogInfoRef = ref();
 		const state = reactive({
-			uris: {
-				page: getBlogTypePageApi,
-				delete: deleteBlogTypeApi
+			urls: {
+				page: getBlogInfoPageApi,
+				delete: deleteBlogInfoApi
 			},
-			formConfig: {},
 			configObj: {
-				title: '分类',
-				createPath: createBlogTypeApi,
-				updatePath: updateBlogTypeApi,
-				viewPath: viewBlogTypeApi
-			}
+				title: '博客',
+				createPath: createBlogInfoApi,
+				updatePath: updateBlogInfoApi,
+				viewPath: viewBlogInfoApi
+			},
+
 		});
-		const getFormConfig = () => {
-			postAction(getConfigApi, {
-				key: 'BlogTypeKey'
-			}).then(res => {
-				if (res.status === StatusEnum.SUCCESS) {
-					state.formConfig = JSON.parse(res.data.config);
-				}
-			})
-		}
 		const {
 			tableRef,
 			modalFormRef,
-			formCreateRef,
+			childRef,
 			pageInfo,
 			dataList,
 			tableHeight,
@@ -116,19 +99,16 @@ export default {
 			changePageIndex,
 			changePageSize
 		} = useCrud({
-			uris: state.uris,
-			parentRef: blogTypeRef
-		});
-		onMounted(() => {
-			getFormConfig();
+			uris: state.urls,
+			parentRef: blogInfoRef
 		});
 		return {
-			blogTypeRef,
+			blogInfoRef,
 			...toRefs(state),
 
 			tableRef,
 			modalFormRef,
-			formCreateRef,
+			childRef,
 			pageInfo,
 			dataList,
 			tableHeight,
@@ -147,7 +127,7 @@ export default {
 </script>
 
 <style scoped lang='scss'>
-	.blog-type-container{
+	.blog-info-container{
 		padding: 20px;
 		overflow: auto;
 	}

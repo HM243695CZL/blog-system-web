@@ -3,7 +3,6 @@ import { PageEntity } from '/@/common/page.entity';
 import { ElMessage } from 'element-plus';
 import {getAction, postAction} from '/@/api/common';
 import { StatusEnum } from '/@/common/status.enum';
-import _ from 'lodash';
 
 interface ICrudParams {
 	uris: {
@@ -20,7 +19,7 @@ export default function({
 	}: ICrudParams) {
 	const tableRef = ref();
 	const modalFormRef = ref();
-	const formCreateRef = ref();
+	const childRef = ref();
 	const state = reactive({
 		pageInfo: new PageEntity(),
 		dataList: [],
@@ -54,21 +53,33 @@ export default function({
 	 * 点击新增
 	 */
 	const clickAdd = () => {
-		modalFormRef.value.openDialog('', false, formCreateRef);
+		modalFormRef.value.openDialog({
+			dataId: '',
+			isView: false,
+			childRef
+		});
 	};
 	/**
 	 * 点击编辑
-	 * @param row 当前行的数据
+	 * @param id 当前行的数据id
 	 */
-	const clickEdit = (row: any) => {
-		modalFormRef.value.openDialog(_.cloneDeep(row), false, formCreateRef);
+	const clickEdit = (id: string) => {
+		modalFormRef.value.openDialog({
+			dataId: id,
+			isView: false,
+			childRef
+		});
 	};
 	/**
 	 * 点击查看
-	 * @param row 当前行的数据
+	 * @param id 当前行的数据id
 	 */
-	const clickView = (row: any) => {
-		modalFormRef.value.openDialog(_.cloneDeep(row), true, formCreateRef);
+	const clickView = (id: string) => {
+		modalFormRef.value.openDialog({
+			dataId: id,
+			isView: true,
+			childRef
+		});
 	};
 	/**
 	 * 点击查询
@@ -168,7 +179,7 @@ export default function({
 	return {
 		tableRef,
 		modalFormRef,
-		formCreateRef,
+		childRef,
 		...toRefs(state),
 		getDataList,
 		clickAdd,

@@ -46,11 +46,19 @@
 			@changePageSize='changePageSize'
 			@changePageIndex='changePageIndex'
 		/>
-    <UserModal
-        ref='modalFormRef'
-        :role-list="roleList"
-        @refreshList='getDataList'
-    />
+		<CommonModal
+			ref='modalFormRef'
+			:title='configObj.title'
+			:create-path='configObj.createPath'
+			:update-path='configObj.updatePath'
+			:view-path='configObj.viewPath'
+			@refreshList='getDataList'
+		>
+			<UserModal
+				ref='childRef'
+				:role-list="roleList"
+			/>
+		</CommonModal>
 		<UpdatePassModal
 			ref='updatePassRef'
 		/>
@@ -60,9 +68,11 @@
 <script lang="ts">
 	import useCrud from '/@/hooks/useCrud';
   import {onMounted, reactive, ref, toRefs} from 'vue';
-	import { deleteUserApi, getUserPageApi } from '/@/api/system/user';
+	import { createUserApi, deleteUserApi,
+		getUserPageApi, updateUserApi, viewUserApi } from '/@/api/system/user';
 	import PreviewImg from '/@/components/previewImg/index.vue';
 	import CommonTop from '/@/components/CommonTop/index.vue';
+	import CommonModal from '/@/components/CommonModal/index.vue';
 	import PaginationCommon from '/@/components/PaginationCommon/index.vue';
   import UserModal from './component/user/userModal.vue';
 	import UpdatePassModal from './component/user/updatePassModal.vue';
@@ -77,6 +87,7 @@
 			CommonTop,
 			PaginationCommon,
       UserModal,
+			CommonModal,
 			UpdatePassModal
 		},
 		setup() {
@@ -87,11 +98,18 @@
 					page: getUserPageApi,
 					delete: deleteUserApi
 				},
-        roleList: []
+        roleList: [],
+				configObj: {
+					title: '用户',
+					createPath: createUserApi,
+					updatePath: updateUserApi,
+					viewPath: viewUserApi
+				}
 			});
 			const {
         tableRef,
         modalFormRef,
+				childRef,
 				pageInfo,
 				dataList,
 				tableHeight,
@@ -129,6 +147,7 @@
 
         tableRef,
         modalFormRef,
+				childRef,
         pageInfo,
         dataList,
         tableHeight,

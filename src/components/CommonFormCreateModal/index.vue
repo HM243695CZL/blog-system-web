@@ -1,5 +1,5 @@
 <template>
-	<div class='common-modal-container'>
+	<div class='common-modal-form-create-container'>
 		<el-dialog :append-to-body='false'
 							 :close-on-click-modal='false'
 							 :title='title'
@@ -16,7 +16,7 @@
 </template>
 
 <script lang='ts' setup>
-	import useCommonModal from '/@/hooks/useCommonModal';
+	import useFormCreateCrud from '/@/hooks/useFormCreateCrud';
 
 	const props = defineProps({
 		title: {
@@ -35,10 +35,6 @@
 			type: String,
 			required: true
 		},
-		ruleForm: {
-			type: Object,
-			default: () => {}
-		},
 		modalWidth: {
 			type: String,
 			default: '600px'
@@ -47,25 +43,25 @@
 	const emits = defineEmits([
 		'refreshList'
 	]);
-
 	const refreshList = () => {
 		emits('refreshList');
 	};
-
 	const {
-		openDialog,
-		closeDialog,
-		clickConfirm,
-		isShowDialog,
 		title,
-	} = useCommonModal({
+		isShowDialog,
+		closeDialog,
+		openDialog,
+		clickConfirm
+	} = useFormCreateCrud({
+		title: '分类',
 		createPath: props.createPath,
 		updatePath: props.updatePath,
 		viewPath: props.viewPath,
-		title: props.title,
-		refreshList,
+		clearFields: ['name'],
+		refreshList
 	});
 	defineExpose({
-		openDialog,
+		openDialog
 	});
 </script>
+

@@ -54,7 +54,7 @@
 
 <script lang='ts'>
 import CommonTop from '/@/components/CommonTop/index.vue';
-import CommonModal from '/@/components/CommonModal/index.vue';
+import CommonModal from '/@/components/CommonFormCreateModal/index.vue';
 import FormCreate from '/@/components/FormCreate/index.vue';
 import PaginationCommon from '/@/components/PaginationCommon/index.vue';
 import { onMounted, reactive, ref, toRefs } from 'vue';
