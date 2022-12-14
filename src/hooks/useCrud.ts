@@ -7,6 +7,7 @@ import { StatusEnum } from '/@/common/status.enum';
 interface ICrudParams {
 	uris: {
 		page?: string, // 分页查询接口
+		pageMethod?: string, // 分页查询接口请求方法
 		deleteBatch?: string, // 批量删除
 		delete?: string, // 单个删除接口
 	},
@@ -36,7 +37,12 @@ export default function({
 			ElMessage.error('请设置uris.page属性！');
 			return false;
 		}
-		postAction(uris.page, {
+		let actionMap = {
+			post: (url, data) => postAction(url, data),
+			get: (url, data) => getAction(url, data)
+		};
+		const reqMethod = uris.pageMethod ? uris.pageMethod : 'post';
+		actionMap[reqMethod](uris.page, {
 			...state.pageInfo,
 			...state.searchParams
 		}).then(res => {
@@ -44,7 +50,7 @@ export default function({
 				if (parentRef) {
 					state.tableHeight = parentRef.value.getBoundingClientRect().height;
 				}
-				state.dataList = res.data.list;
+				state.dataList = reqMethod === 'post' ? res.data.list : res.data;
 				state.pageInfo.totalRecords = res.data.total;
 			}
 		})

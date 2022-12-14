@@ -1,11 +1,8 @@
 <template>
   <div class="sys-menu-container h100">
-    <el-button size="default" type="primary" @click="clickAdd">
-      <el-icon>
-        <ele-Plus />
-      </el-icon>
-      新增
-    </el-button>
+		<CommonTop
+			@clickAdd="clickAdd"
+		/>
     <vxe-table
       border='inner'
       :data='dataList'
@@ -32,59 +29,71 @@
         </template>
       </vxe-column>
     </vxe-table>
-    <MenuModal
-      ref="modalFormRef"
-      :menu-list="dataList"
-      @refreshList="getDataList"
-    />
+		<CommonModal
+			ref='modalFormRef'
+			:title='configObj.title'
+			:create-path='configObj.createPath'
+			:update-path='configObj.updatePath'
+			:view-path='configObj.viewPath'
+			:modal-width='"800px"'
+			@refreshList='getDataList'
+		>
+			<MenuModal
+				ref="childRef"
+				:menu-list="dataList"
+			/>
+		</CommonModal>
   </div>
 </template>
 
 <script lang="ts">
-import {onMounted, reactive, ref, toRefs} from 'vue';
-import {getAction} from '/@/api/common';
-import {deleteMenuApi, getMenuListApi} from '/@/api/system/menu';
-import {StatusEnum} from '/@/common/status.enum';
+import {reactive, toRefs} from 'vue';
+import {deleteMenuApi, getMenuListApi,
+	createMenuApi, updateMenuApi, viewMenuApi} from '/@/api/system/menu';
+import CommonTop from '/@/components/CommonTop/index.vue';
 import MenuModal from './component/menu/menuModal.vue';
-import {ElMessage} from 'element-plus';
+import CommonModal from '/@/components/CommonModal/index.vue';
+
+import useCrud from '/@/hooks/useCrud';
 
 export default {
   name: 'sys-menu',
   components: {
-    MenuModal
+    MenuModal,
+		CommonModal,
+		CommonTop
   },
   setup() {
-    const modalFormRef = ref();
     const state = reactive({
-      dataList: []
+			uris: {
+				page: getMenuListApi,
+				pageMethod: 'get',
+				delete: deleteMenuApi
+			},
+			configObj: {
+				title: '菜单',
+				createPath: createMenuApi,
+				updatePath: updateMenuApi,
+				viewPath: viewMenuApi
+			}
     });
-    const getDataList = () => {
-      getAction(getMenuListApi, '').then(res => {
-        if (res.status === StatusEnum.SUCCESS) {
-          state.dataList = res.data;
-        }
-      });
-    };
-    const clickAdd = () => {
-      modalFormRef.value.openDialog();
-    };
-    const clickEdit = (row: any) => {
-      modalFormRef.value.openDialog(row);
-    };
-    const clickDelete = (id: string) => {
-      getAction(`${deleteMenuApi}/${id}`, '').then(res => {
-        if (res.status === StatusEnum.SUCCESS) {
-          ElMessage.success(res.message);
-          getDataList();
-        }
-      });
-    };
-    onMounted(() => {
-      getDataList();
-    });
+		const {
+			modalFormRef,
+			childRef,
+			dataList,
+			getDataList,
+			clickAdd,
+			clickEdit,
+			clickDelete
+		} = useCrud({
+			uris: state.uris,
+		})
     return {
-      modalFormRef,
       ...toRefs(state),
+
+			modalFormRef,
+			childRef,
+			dataList,
       clickAdd,
       getDataList,
       clickEdit,
