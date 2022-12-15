@@ -1,5 +1,5 @@
 /**
- * 手写表单的弹窗hooks
+ * 弹窗hooks
  */
 import { nextTick, reactive, toRefs } from 'vue';
 import { getAction, postAction } from '/@/api/common';
@@ -119,6 +119,12 @@ export default function({
 		} else {
 			state.formModalRef.formRef.validate((valid: boolean) => {
 				if (valid) {
+					// 这里的循环是因为后台无法保存数组字符串，所以将数组字符串转为字符串
+					for (const o in state.formModalRef.state.ruleForm) {
+						if (state.formModalRef.state.ruleForm[o] instanceof Array) {
+							state.formModalRef.state.ruleForm[o] = state.formModalRef.state.ruleForm[o].join(',')
+						}
+					}
 					postAction(state.ruleForm.id ? updatePath : createPath, {
 						...state.ruleForm,
 						...state.formModalRef.state.ruleForm,

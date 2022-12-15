@@ -24,7 +24,11 @@
 			<vxe-column title='标题' field='title' />
 			<vxe-column title='分类' field='type' />
 			<vxe-column title='更新时间' field='updateTime' />
-			<vxe-column title='状态' field='state' />
+			<vxe-column title='状态' field='state'>
+				<template #default='scope'>
+					<el-tag :type='scope.row.state ? "success" : "info"'>{{scope.row.state ? '已发布' : '未发布'}}</el-tag>
+				</template>
+			</vxe-column>
 			<vxe-column title="操作" width="200">
 				<template #default="scope">
 					<el-button size='small' type='default' @click="clickEdit(scope.row.id)">修改</el-button>
