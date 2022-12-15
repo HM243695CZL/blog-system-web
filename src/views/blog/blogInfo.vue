@@ -22,7 +22,7 @@
 		>
 			<vxe-column type='seq' title='序号' width='60' />
 			<vxe-column title='标题' field='title' />
-			<vxe-column title='分类' field='type' />
+			<vxe-column title='分类' field='typeName' />
 			<vxe-column title='更新时间' field='updateTime' />
 			<vxe-column title='状态' field='state'>
 				<template #default='scope'>

@@ -77,13 +77,19 @@ export function formatTwoStageRoutes(arr: any) {
 	});
 	return newArr;
 }
-
+// 白名单
+const whitePathList = [
+	'/gateway/home'
+]
 // 路由加载前
 router.beforeEach(async (to, from, next) => {
 	NProgress.configure({ showSpinner: false });
 	if (to.meta.title) NProgress.start();
 	const token = Session.get('token');
-	if (to.path === '/login' && !token) {
+	if(whitePathList.includes(to.path)) {
+		NProgress.done();
+		next();
+	} else if (to.path === '/login' && !token) {
 		next();
 		NProgress.done();
 	} else {

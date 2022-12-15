@@ -36,6 +36,7 @@
 			</el-col>
 		</el-form-item>
 		<el-form-item class="login-animation4">
+			<el-button type='default' round @click='clickBack'>返回</el-button>
 			<el-button type="primary" class="login-content-submit" round @click="onSignIn">
 				<span>登 录</span>
 			</el-button>
@@ -73,6 +74,9 @@ export default defineComponent({
 		const currentTime = computed(() => {
 			return formatAxis(new Date());
 		});
+		const clickBack = () => {
+			router.push('/gateway/home')
+		};
 		// 登录
 		const onSignIn = async () => {
 			postAction(loginApi, {
@@ -123,6 +127,7 @@ export default defineComponent({
 		};
 		return {
 			onSignIn,
+			clickBack,
 			...toRefs(state),
 		};
 	},
@@ -155,11 +160,17 @@ export default defineComponent({
 		font-weight: bold;
 		letter-spacing: 5px;
 	}
-	.login-content-submit {
-		width: 100%;
-		letter-spacing: 2px;
-		font-weight: 300;
-		margin-top: 15px;
+	.login-animation4{
+		display: flex;
+		justify-content: space-between;
+		align-items: center;
+		.el-button{
+			flex: 1;
+		}
+		.login-content-submit {
+			letter-spacing: 2px;
+			font-weight: 300;
+		}
 	}
 }
 </style>

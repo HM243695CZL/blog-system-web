@@ -90,4 +90,12 @@ export const staticRoutes: Array<RouteRecordRaw> = [
 			title: '登录',
 		},
 	},
+	{
+		path: '/gateway/home',
+		name: 'gatewayHome',
+		component: () => import('/@/views/gatewayBlog/home/index.vue'),
+		meta: {
+			title: '博客首页'
+		}
+	}
 ];
