@@ -43,10 +43,11 @@
 			:create-path='configObj.createPath'
 			:update-path='configObj.updatePath'
 			:view-path='configObj.viewPath'
+			is-form-create
 			@refreshList='getDataList'
 		>
 			<FormCreate
-				ref='formCreateRef'
+				ref='childRef'
 				:form-config='formConfig'
 			/>
 		</CommonModal>
@@ -55,7 +56,7 @@
 
 <script lang='ts'>
 import CommonTop from '/@/components/CommonTop/index.vue';
-import CommonModal from '/@/components/CommonFormCreateModal/index.vue';
+import CommonModal from '/@/components/CommonModal/index.vue';
 import FormCreate from '/@/components/FormCreate/index.vue';
 import PaginationCommon from '/@/components/PaginationCommon/index.vue';
 import { onMounted, reactive, ref, toRefs } from 'vue';
@@ -102,7 +103,7 @@ export default {
 		const {
 			tableRef,
 			modalFormRef,
-			formCreateRef,
+			childRef,
 			pageInfo,
 			dataList,
 			tableHeight,
@@ -128,7 +129,7 @@ export default {
 
 			tableRef,
 			modalFormRef,
-			formCreateRef,
+			childRef,
 			pageInfo,
 			dataList,
 			tableHeight,

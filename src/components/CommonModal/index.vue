@@ -42,6 +42,14 @@
 		modalWidth: {
 			type: String,
 			default: '600px'
+		},
+		isFormCreate: {
+			type: Boolean,
+			default: false
+		},
+		clearFields: {
+			type: Array as any,
+			default: () => []
 		}
 	});
 	const emits = defineEmits([
@@ -64,6 +72,8 @@
 		viewPath: props.viewPath,
 		title: props.title,
 		refreshList,
+		clearFields: props.clearFields,
+		isFormCreate: props.isFormCreate
 	});
 	defineExpose({
 		openDialog,

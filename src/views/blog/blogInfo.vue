@@ -46,7 +46,11 @@
 			:modal-width='"1080px"'
 			@refreshList='getDataList'
 		>
-			<BlogInfoModal ref='childRef' />
+			<BlogInfoModal
+				ref='childRef'
+				:type-list='typeList'
+				:tag-list='tagList'
+			/>
 		</CommonModal>
 	</div>
 </template>
@@ -56,10 +60,14 @@ import CommonTop from '/@/components/CommonTop/index.vue';
 import PaginationCommon from '/@/components/PaginationCommon/index.vue';
 import CommonModal from '/@/components/CommonModal/index.vue';
 import BlogInfoModal from './component/blogInfoModal.vue';
-import { reactive, ref, toRefs } from 'vue';
+import { onMounted, reactive, ref, toRefs } from 'vue';
 import { createBlogInfoApi, deleteBlogInfoApi,
 	getBlogInfoPageApi, updateBlogInfoApi, viewBlogInfoApi } from '/@/api/blog/blogInfo';
+import { getBlogTypeListApi } from '/@/api/blog/type';
+import { getTagListApi } from '/@/api/blog/tag';
 import useCrud from '/@/hooks/useCrud';
+import { getAction } from '/@/api/common';
+import { StatusEnum } from '/@/common/status.enum';
 export default {
 	name: 'blogInfo',
 	components: {
@@ -81,8 +89,23 @@ export default {
 				updatePath: updateBlogInfoApi,
 				viewPath: viewBlogInfoApi
 			},
-
+			typeList: [],
+			tagList: []
 		});
+		const getTypeList = () => {
+			getAction(getBlogTypeListApi, '').then(res => {
+				if (res.status === StatusEnum.SUCCESS) {
+					state.typeList = res.data;
+				}
+			});
+		};
+		const getTagList = () => {
+			getAction(getTagListApi, '').then(res => {
+				if (res.status === StatusEnum.SUCCESS) {
+					state.tagList = res.data;
+				}
+			});
+		};
 		const {
 			tableRef,
 			modalFormRef,
@@ -102,6 +125,10 @@ export default {
 		} = useCrud({
 			uris: state.urls,
 			parentRef: blogInfoRef
+		});
+		onMounted(() => {
+			getTypeList();
+			getTagList();
 		});
 		return {
 			blogInfoRef,
