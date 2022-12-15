@@ -43,6 +43,7 @@
 			:create-path='configObj.createPath'
 			:update-path='configObj.updatePath'
 			:view-path='configObj.viewPath'
+			:modal-width='"1080px"'
 			@refreshList='getDataList'
 		>
 			<BlogInfoModal ref='childRef' />
