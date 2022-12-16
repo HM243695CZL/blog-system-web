@@ -2,19 +2,21 @@ import request from '/@/utils/request';
 
 export const reviewFileUrl = '';
 
-export function postAction(url: string, data: any) {
+export function postAction(url: string, data: any, state: boolean = true) {
 	return request({
 		url,
 		method: 'post',
-		data
+		data,
+		state
 	})
 }
 
-export function getAction(url: string, data: any) {
+export function getAction(url: string, data: any, state: boolean = true) {
 	return request({
 		url,
 		method: 'get',
-		data
+		data,
+		state
 	})
 }
 

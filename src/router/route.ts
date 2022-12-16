@@ -96,6 +96,22 @@ export const staticRoutes: Array<RouteRecordRaw> = [
 		component: () => import('/@/views/gatewayBlog/home/index.vue'),
 		meta: {
 			title: '博客首页'
+		},
+	},
+	{
+		path: '/gateway/type',
+		name: 'gatewayType',
+		component: () => import('/@/views/gatewayBlog/type/index.vue'),
+		meta: {
+			title: '分类'
+		}
+	},
+	{
+		path: '/gateway/tag',
+		name: 'gatewayTag',
+		component: () => import('/@/views/gatewayBlog/tag/index.vue'),
+		meta: {
+			title: '专栏'
 		}
 	}
 ];

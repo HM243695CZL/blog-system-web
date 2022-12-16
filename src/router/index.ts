@@ -79,7 +79,9 @@ export function formatTwoStageRoutes(arr: any) {
 }
 // 白名单
 const whitePathList = [
-	'/gateway/home'
+	'/gateway/home',
+	'/gateway/type',
+	'/gateway/tag'
 ]
 // 路由加载前
 router.beforeEach(async (to, from, next) => {
