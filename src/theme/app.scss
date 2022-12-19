@@ -161,6 +161,18 @@ body,
 .flex {
 	display: flex;
 }
+.flex-space-center{
+	justify-content: center;
+}
+.flex-space-between{
+	justify-content: space-between;
+}
+.flex-start{
+	justify-content: flex-start;
+}
+.flex-align-center{
+	align-items: center;
+}
 .flex-auto {
 	flex: 1;
 	overflow: hidden;
