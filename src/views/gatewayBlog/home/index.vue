@@ -49,6 +49,16 @@
 						</div>
 					</el-card>
 				</el-col>
+				<el-card shadow='never'>
+					<template #header>
+						<div class="card-header card-header-tag flex flex-space-between flex-align-center">
+							<div class='card-header-left'>标签</div>
+							<div class='card-header-right'>
+								更多
+							</div>
+						</div>
+					</template>
+				</el-card>
 			</el-row>
 			<PaginationCommon
 				:page-info='pageInfo'
@@ -63,7 +73,7 @@
 import { defineComponent, onMounted, reactive, toRefs } from 'vue';
 import BlogHeader from '/@/components/BlogHeader/index.vue'
 import { postAction, getAction } from '/@/api/common';
-import { getBlogListApi, getGatewayTypeList } from '/@/api/blog/blogGateway';
+import { getBlogListApi, getGatewayTypeListApi, getGatewayTagListApi } from '/@/api/blog/blogGateway';
 import { StatusEnum } from '/@/common/status.enum';
 import PaginationCommon from '/@/components/PaginationCommon/index.vue';
 import { PageEntity } from '/@/common/page.entity';
@@ -78,6 +88,7 @@ export default defineComponent({
 		const state = reactive({
 			blogList: [],
 			typeList: [],
+			tagList: [],
 			pageInfo: new PageEntity()
 		});
 		const getBlogList = () => {
@@ -101,15 +112,23 @@ export default defineComponent({
 			getBlogList();
 		};
 		const getTypeList = () => {
-			getAction(getGatewayTypeList, '', false).then(res => {
+			getAction(getGatewayTypeListApi, '', false).then(res => {
 				if (res.status === StatusEnum.SUCCESS) {
 					state.typeList = res.data;
+				}
+			});
+		};
+		const getTagList = () => {
+			getAction(getGatewayTagListApi, '', false).then(res => {
+				if (res.status === StatusEnum.SUCCESS) {
+					state.tagList = res.data;
 				}
 			});
 		};
 		onMounted(() => {
 			getBlogList();
 			getTypeList();
+			getTagList();
 		});
 		return {
 			...toRefs(state),
