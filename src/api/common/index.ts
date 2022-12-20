@@ -13,7 +13,7 @@ export function postAction(url: string, data: any, state: boolean = true) {
 
 export function getAction(url: string, data: any, state: boolean = true) {
 	return request({
-		url,
+		url: url,
 		method: 'get',
 		data,
 		state

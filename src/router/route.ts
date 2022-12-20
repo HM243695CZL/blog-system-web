@@ -113,5 +113,13 @@ export const staticRoutes: Array<RouteRecordRaw> = [
 		meta: {
 			title: '专栏'
 		}
+	},
+	{
+		path: '/gateway/info/:id',
+		name: 'gatewayInfo',
+		component: () => import('/@/views/gatewayBlog/info/index.vue'),
+		meta: {
+			title: '博客详情'
+		}
 	}
 ];

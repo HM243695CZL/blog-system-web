@@ -15,11 +15,11 @@
 						</template>
 						<div class='info flex flex-space-between flex-align-center' v-for='item in blogList' :key='item.id'>
 							<div class='content'>
-								<div class='title'>{{item.title}}</div>
+								<div class='title' @click='clickBlogTitle(item.id)'>{{item.title}}</div>
 								<div class='summary'>{{item.summary}}</div>
 								<div class='content-footer flex flex-space-between flex-align-center'>
 									<div class='publish-date flex flex-start flex-align-center'>
-										<el-icon><ele-Clock /></el-icon>{{item.addTime.slice(0, 10)}}
+										<el-icon><ele-Clock /></el-icon>{{(item.addTime || '').slice(0, 10)}}
 										<el-icon class='view-icon'><ele-View /></el-icon>{{item.views}}
 									</div>
 									<el-tag>{{item.typeName}}</el-tag>
@@ -48,17 +48,34 @@
 							</div>
 						</div>
 					</el-card>
-				</el-col>
-				<el-card shadow='never'>
-					<template #header>
-						<div class="card-header card-header-tag flex flex-space-between flex-align-center">
-							<div class='card-header-left'>标签</div>
-							<div class='card-header-right'>
-								更多
+					<el-card shadow='never' class='tag-card'>
+						<template #header>
+							<div class="card-header card-header-tag flex flex-space-between flex-align-center">
+								<div class='card-header-left'>标签</div>
+								<div class='card-header-right'>
+									更多
+								</div>
+							</div>
+						</template>
+						<div class='tag-list flex flex-start flex-align-center'>
+							<div class='hl-tag tag-item' v-for='item in tagList.slice(0, 10)' :key='item.id'>
+								{{item.name}} <span>{{item.number}}</span>
 							</div>
 						</div>
-					</template>
-				</el-card>
+					</el-card>
+					<el-card shadow='never' class='recommend-card'>
+						<template #header>
+							<div class="card-header card-header-tag flex flex-space-between flex-align-center">
+								<div class='card-header-left'>最新推荐</div>
+							</div>
+						</template>
+						<div class='recommend-list'>
+							<div class='list-item' v-for='item in recommendBlogList' :key='item.id'>
+								{{item.title}}
+							</div>
+						</div>
+					</el-card>
+				</el-col>
 			</el-row>
 			<PaginationCommon
 				:page-info='pageInfo'
@@ -77,6 +94,7 @@ import { getBlogListApi, getGatewayTypeListApi, getGatewayTagListApi } from '/@/
 import { StatusEnum } from '/@/common/status.enum';
 import PaginationCommon from '/@/components/PaginationCommon/index.vue';
 import { PageEntity } from '/@/common/page.entity';
+import { useRouter } from 'vue-router';
 
 export default defineComponent({
 	name: 'gatewayHome',
@@ -85,16 +103,19 @@ export default defineComponent({
 		PaginationCommon
 	},
 	setup() {
+		const router = useRouter();
 		const state = reactive({
 			blogList: [],
 			typeList: [],
 			tagList: [],
-			pageInfo: new PageEntity()
+			pageInfo: new PageEntity(),
+			recommendBlogList: []
 		});
 		const getBlogList = () => {
 			postAction(getBlogListApi, {
 				pageIndex: state.pageInfo.pageIndex,
-				pageSize: state.pageInfo.pageSize
+				pageSize: state.pageInfo.pageSize,
+				state: true
 			}, false).then(res => {
 				if (res.status === StatusEnum.SUCCESS) {
 					state.blogList = res.data.list;
@@ -125,15 +146,34 @@ export default defineComponent({
 				}
 			});
 		};
+		const getRecommendBlogList = () => {
+			postAction(getBlogListApi, {
+				pageIndex: 1,
+				pageSize: 10,
+				state: true,
+				isRecommend: true
+			}, false).then(res => {
+				if (res.status === StatusEnum.SUCCESS) {
+					state.recommendBlogList = res.data.list;
+				}
+			})
+		};
+		const clickBlogTitle = (id: number) => {
+			router.push({
+				path: '/gateway/info/' + id
+			});
+		}
 		onMounted(() => {
 			getBlogList();
 			getTypeList();
 			getTagList();
+			getRecommendBlogList();
 		});
 		return {
 			...toRefs(state),
 			changePageSize,
-			changePageIndex
+			changePageIndex,
+			clickBlogTitle
 		}
 	}
 });
@@ -144,6 +184,7 @@ export default defineComponent({
 		width: 100%;
 		height: 100%;
 		background: var(--el-color-white);
+		overflow-y: auto;
 		.home-content{
 			margin: 30px auto;
 			.card-header-blog{
@@ -214,26 +255,34 @@ export default defineComponent({
 					}
 				}
 			}
-			.hl-tag{
-				background: #fff;
-				border: 1px solid #00b5ad;
-				color: #00b5ad;
-				padding: 5px 12px;
-				border-radius: 3px;
-				position: relative;
-				&::before{
-					content: '';
-					background: #fff;
-					border-color: #00b5ad;
-					border-width: 0 0 1px 1px;
-					border-style: solid;
-					position: absolute;
-					width: 8px;
-					height: 8px;
-					transform: translateX(-50%) translateY(-50%) rotate(45deg);
-					top: 50%;
-					left: -1px;
-					z-index: 2;
+			.tag-card{
+				margin-top: 20px;
+				.tag-list{
+					.tag-item{
+						margin-right: 10px;
+						font-weight: 700;
+						cursor: pointer;
+						span{
+							margin-left: 10px;
+						}
+					}
+				}
+			}
+			.recommend-card{
+				margin-top: 20px;
+				.recommend-list{
+					.list-item{
+						padding: 10px 5px;
+						color: #333;
+						border-bottom: 1px solid #ccc;
+						cursor: pointer;
+						&:first-child{
+							padding-top: 0;
+						}
+						&:hover{
+							color: #00b5ad;
+						}
+					}
 				}
 			}
 		}

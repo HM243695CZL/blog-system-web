@@ -170,6 +170,9 @@ body,
 .flex-start{
 	justify-content: flex-start;
 }
+.flex-align-start{
+	align-items: flex-start;
+}
 .flex-align-center{
 	align-items: center;
 }
@@ -242,8 +245,40 @@ body,
 .w180{
 	width: 180px;
 }
+.w240{
+	width: 240px;
+}
 .base-width{
 	width: 80%;
+}
+.hl-tag{
+	background: #fff;
+	border: 1px solid #00b5ad;
+	color: #00b5ad;
+	padding: 5px 12px;
+	border-radius: 3px;
+	position: relative;
+	margin-right: 12px;
+	&:first-child{
+		margin-left: 12px;
+	}
+	&:last-child{
+		margin-right: 0;
+	}
+	&::before{
+		content: '';
+		background: #fff;
+		border-color: #00b5ad;
+		border-width: 0 0 1px 1px;
+		border-style: solid;
+		position: absolute;
+		width: 8px;
+		height: 8px;
+		transform: translateX(-50%) translateY(-50%) rotate(45deg);
+		top: 50%;
+		left: -1px;
+		z-index: 2;
+	}
 }
 
 /* 颜色值

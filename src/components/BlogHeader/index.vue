@@ -20,7 +20,7 @@
 							</el-icon>
 						</template>
 					</el-input>
-					<div class='login-btn' @click='clickLogin'>登录</div>
+					<div class='login-btn' @click='clickLogin'>登录后台</div>
 				</div>
 			</div>
 		</header>
@@ -55,6 +55,9 @@ const clickLogin = () => {
 
 <style scoped lang='scss'>
 	.blog-header-container{
+		position: sticky;
+		top: 0;
+		z-index: 999;
 		.header-top-bar{
 			background-color: #1b1c1d;
 			.header-bar{
@@ -93,7 +96,7 @@ const clickLogin = () => {
 					align-items: center;
 					.login-btn{
 						margin-left: 30px;
-						width: 90px;
+						width: 135px;
 						border-radius: 5px;
 						color: rgba(255, 255, 255, .8);
 						text-align: center;
