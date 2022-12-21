@@ -87,7 +87,7 @@ router.beforeEach(async (to, from, next) => {
 	if(to.path.indexOf(whitePath) > -1) {
 		NProgress.done();
 		next();
-	} else if (to.path === '/login' && !token) {
+	} else if (to.path === '/login') {
 		next();
 		NProgress.done();
 	} else {
