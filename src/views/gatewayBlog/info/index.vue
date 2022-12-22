@@ -293,8 +293,10 @@ import { ElMessage } from 'element-plus';
 							width: 30px;
 							height: 30px;
 							border-radius: 50%;
-							border: 1px solid #f1f1f1;
+							border: 1px solid #ccc;
 							margin-right: 10px;
+							background: url("https://hl-mall-tiny.oss-cn-chengdu.aliyuncs.com/hlmall/images/20221219/2018e9ac91ec37d9aaf437a1fd5d7070.png");
+							background-size: 30px 30px;
 						}
 						.comment-detail{
 							flex: 1;
@@ -317,7 +319,7 @@ import { ElMessage } from 'element-plus';
 								}
 							}
 							.children{
-								padding: 20px 0;
+								padding: 20px 5px;
 								background: #f1f1f1;
 							}
 						}

@@ -11,8 +11,9 @@
 						</i>
 						{{item.text}}
 					</div>
+					<div class='login-btn-mobile hidden-sm-and-up' @click='clickLogin'>登录</div>
 				</el-col>
-				<el-col class='search-box- hidden-xs-only' :span='12'>
+				<el-col class='search-box hidden-xs-only' :span='12'>
 					<el-input size='small' v-model='state.keywords' placeholder='搜索关键字'>
 						<template #append>
 							<el-icon>
@@ -71,6 +72,7 @@ const clickLogin = () => {
 					justify-content: flex-start;
 					align-items: center;
 					color: #fff;
+					position: relative;
 					.list-item{
 						margin: 0 5px;
 						padding: 5px 12px;
@@ -88,6 +90,12 @@ const clickLogin = () => {
 							font-size: 20px;
 							margin-right: 5px;
 						}
+					}
+					.login-btn-mobile{
+						position: absolute;
+						top: 7px;
+						right: -5px;
+						color: #00b5ad;
 					}
 				}
 				.search-box{
