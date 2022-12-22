@@ -75,22 +75,10 @@
 				<div class='comment' v-if='state.commentFlag'>
 					<el-input v-model='state.content' placeholder='请输入评论' type='textarea' :rows='5' resize='none'></el-input>
 					<div class='user-comment flex flex-start flex-align-center'>
-						<el-input class='w240' v-model='state.name' placeholder='姓名'>
-							<template #prepend>
-								<el-icon>
-									<ele-UserFilled />
-								</el-icon>
-							</template>
-						</el-input>
-						<el-input class='w240' v-model='state.email' placeholder='邮箱'>
-							<template #prepend>
-								<el-icon>
-									<ele-Message />
-								</el-icon>
-							</template>
-						</el-input>
-						<el-button type='primary' @click='clickComment'>确定</el-button>
-						<el-button type='default' @click='clickCancel'>取消</el-button>
+						<el-input class='w240' v-model='state.name' placeholder='姓名' size='small'></el-input>
+						<el-input class='w240' v-model='state.email' placeholder='邮箱' size='small'></el-input>
+						<el-button size='small' type='primary' @click='clickComment'>确定</el-button>
+						<el-button size='small' type='default' @click='clickCancel'>取消</el-button>
 					</div>
 				</div>
 			</div>
@@ -226,7 +214,6 @@ import { ElMessage } from 'element-plus';
 		height: 100%;
 		overflow-y: auto;
 		.info-content{
-			width: 60%;
 			margin: 0 auto;
 			background: var(--el-color-white);
 			padding: 15px;
@@ -242,11 +229,16 @@ import { ElMessage } from 'element-plus';
 			}
 			.head-img{
 				padding: 10px;
-				height: 480px;
+				height: 550px;
 				border: 1px solid #f5f5f5;
 				img{
 					width: 100%;
 					height: 100%;
+				}
+			}
+			@media (max-width: 766px){
+				.head-img{
+					height: 200px;
 				}
 			}
 			.content-info{
@@ -260,9 +252,6 @@ import { ElMessage } from 'element-plus';
 					padding-top: 30px;
 					.type-tag{
 						flex: 1;
-						.type{
-							padding: 10px 0;
-						}
 						.tag{
 							padding: 10px 0;
 						}
