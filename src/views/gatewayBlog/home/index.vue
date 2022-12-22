@@ -3,7 +3,7 @@
 		<BlogHeader />
 		<div class='home-content base-width'>
 			<el-row :gutter='20'>
-				<el-col :span='16'>
+				<el-col :span='16' :xs='24'>
 					<el-card shadow='never'>
 						<template #header>
 							<div class="card-header card-header-blog flex flex-space-between flex-align-center">
@@ -22,7 +22,7 @@
 										<el-icon><ele-Clock /></el-icon>{{(item.addTime || '').slice(0, 10)}}
 										<el-icon class='view-icon'><ele-View /></el-icon>{{item.views}}
 									</div>
-									<el-tag>{{item.typeName}}</el-tag>
+									<el-tag size='small'>{{item.typeName}}</el-tag>
 								</div>
 							</div>
 							<div class='img'>
@@ -30,12 +30,25 @@
 							</div>
 						</div>
 					</el-card>
+					<div class='page-bar'>
+						<el-pagination background layout="prev, pager, next"
+													 hide-on-single-page
+													 small
+													 @changePageSize='changePageSize'
+													 @changePageIndex='changePageIndex'
+													 :total="pageInfo.totalRecords" />
+					</div>
 				</el-col>
-				<el-col :span='8'>
+				<el-col :span='8' :xs='24'>
 					<el-card shadow='never'>
 						<template #header>
 							<div class="card-header card-header-classify flex flex-space-between flex-align-center">
-								<div class='card-header-left'>分类</div>
+								<div class='card-header-left'>
+									<el-icon color='#f2711c'>
+										<ele-Suitcase />
+									</el-icon>
+									分类
+								</div>
 								<div class='card-header-right'>
 									更多
 								</div>
@@ -51,7 +64,12 @@
 					<el-card shadow='never' class='tag-card'>
 						<template #header>
 							<div class="card-header card-header-tag flex flex-space-between flex-align-center">
-								<div class='card-header-left'>标签</div>
+								<div class='card-header-left'>
+									<el-icon color='#f2711c'>
+										<ele-CollectionTag />
+									</el-icon>
+									标签
+								</div>
 								<div class='card-header-right'>
 									更多
 								</div>
@@ -66,7 +84,12 @@
 					<el-card shadow='never' class='recommend-card'>
 						<template #header>
 							<div class="card-header card-header-tag flex flex-space-between flex-align-center">
-								<div class='card-header-left'>最新推荐</div>
+								<div class='card-header-left'>
+									<el-icon color='#f2711c'>
+										<ele-TakeawayBox />
+									</el-icon>
+									最新推荐
+								</div>
 							</div>
 						</template>
 						<div class='recommend-list'>
@@ -77,11 +100,7 @@
 					</el-card>
 				</el-col>
 			</el-row>
-			<PaginationCommon
-				:page-info='pageInfo'
-				@changePageSize='changePageSize'
-				@changePageIndex='changePageIndex'
-			/>
+
 		</div>
 	</div>
 </template>
@@ -92,15 +111,13 @@ import BlogHeader from '/@/components/BlogHeader/index.vue'
 import { postAction, getAction } from '/@/api/common';
 import { getBlogListApi, getGatewayTypeListApi, getGatewayTagListApi } from '/@/api/blog/blogGateway';
 import { StatusEnum } from '/@/common/status.enum';
-import PaginationCommon from '/@/components/PaginationCommon/index.vue';
 import { PageEntity } from '/@/common/page.entity';
 import { useRouter } from 'vue-router';
 
 export default defineComponent({
 	name: 'gatewayHome',
 	components: {
-		BlogHeader,
-		PaginationCommon
+		BlogHeader
 	},
 	setup() {
 		const router = useRouter();
@@ -200,6 +217,9 @@ export default defineComponent({
 					}
 				}
 			}
+			.page-bar{
+				padding-bottom: 20px;
+			}
 			.info{
 				padding-bottom: 20px;
 				border-bottom: 1px dashed #ccc;
@@ -208,7 +228,7 @@ export default defineComponent({
 					padding-top: 0;
 				}
 				.content{
-					flex: 1;
+					flex: 3;
 					padding-right: 20px;
 					.title{
 						color: #373737;
@@ -221,22 +241,23 @@ export default defineComponent({
 					}
 					.content-footer{
 						.publish-date{
+							color: #ccc;
+							width: 140px;
 							.el-icon{
 								margin-right: 5px;
 							}
 							.view-icon{
-								margin-left: 20px;
+								margin-left: 8px;
 								margin-right: 5px;
 							}
 						}
 					}
 				}
 				.img{
-					width: 180px;
-					height: 100px;
+					flex: 1;
 					img{
 						width: 100%;
-						height: 100%;
+						height: auto;
 					}
 				}
 			}

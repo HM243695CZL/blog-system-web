@@ -14,6 +14,7 @@ import other from '/@/utils/other';
 
 import ElementPlus from 'element-plus';
 import 'element-plus/dist/index.css';
+import 'element-plus/theme-chalk/display.css';
 import formCreate from '@form-create/element-ui';
 import FcDesigner from '@form-create/designer';
 import 'vxe-table/lib/style.css';

@@ -1,8 +1,8 @@
 <template>
 	<div class='blog-header-container'>
 		<header class='header-top-bar'>
-			<div class='header-bar base-width'>
-				<div class='top-bar-list'>
+			<el-row class='header-bar base-width' :gutter='20'>
+				<el-col class='top-bar-list ' :span='12' :xs='24'>
 					<div :class='["list-item", item.path === state.currentTab ? "active" : ""]'
 							 @click='clickTopBar(item)'
 							 v-for='item in state.topBarList' :key='item.path'>
@@ -11,8 +11,8 @@
 						</i>
 						{{item.text}}
 					</div>
-				</div>
-				<div class='search-box'>
+				</el-col>
+				<el-col class='search-box- hidden-xs-only' :span='12'>
 					<el-input size='small' v-model='state.keywords' placeholder='搜索关键字'>
 						<template #append>
 							<el-icon>
@@ -21,8 +21,8 @@
 						</template>
 					</el-input>
 					<div class='login-btn' @click='clickLogin'>登录后台</div>
-				</div>
-			</div>
+				</el-col>
+			</el-row>
 		</header>
 	</div>
 </template>
@@ -73,7 +73,7 @@ const clickLogin = () => {
 					color: #fff;
 					.list-item{
 						margin: 0 5px;
-						padding: 10px 20px;
+						padding: 5px 12px;
 						cursor: pointer;
 						border-radius: 5px;
 						display: flex;
