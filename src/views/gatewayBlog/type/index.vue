@@ -33,7 +33,7 @@
 			</el-row>
 			<el-row :gutter='20'>
 				<el-col :span='24' :xs='24'>
-					<el-card shadow='never'>
+					<el-card shadow='never' v-if='blogList.length > 0'>
 						<BlogInfoList :data-list='blogList' />
 						<div class='page-bar'>
 							<el-pagination background layout="prev, pager, next"
@@ -44,6 +44,7 @@
 														 :total="pageInfo.totalRecords" />
 						</div>
 					</el-card>
+					<div class='no-data' v-else>暂无数据</div>
 				</el-col>
 			</el-row>
 		</div>
@@ -99,6 +100,7 @@ export default defineComponent({
 		const clickTag = data => {
 			if (data.id === state.currentTypeMap.id) return false;
 			state.currentTypeMap = data;
+			getBlogList();
 		};
 		const changePageSize = (size: number) => {
 			state.pageInfo.pageSize = size;
@@ -179,6 +181,10 @@ export default defineComponent({
 				color: #00b5ad;
 			}
 			.page-bar{
+				padding: 15px 0;
+			}
+			.no-data{
+				text-align: center;
 				padding: 15px 0;
 			}
 		}
