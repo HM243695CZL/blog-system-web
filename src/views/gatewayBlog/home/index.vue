@@ -13,22 +13,7 @@
 								</div>
 							</div>
 						</template>
-						<div class='info flex flex-space-between flex-align-center' v-for='item in blogList' :key='item.id'>
-							<div class='content'>
-								<div class='title' @click='clickBlogTitle(item.id)'>{{item.title}}</div>
-								<div class='summary'>{{item.summary}}</div>
-								<div class='content-footer flex flex-space-between flex-align-center'>
-									<div class='publish-date flex flex-start flex-align-center'>
-										<el-icon><ele-Clock /></el-icon>{{(item.addTime || '').slice(0, 10)}}
-										<el-icon class='view-icon'><ele-View /></el-icon>{{item.views}}
-									</div>
-									<el-tag size='small'>{{item.typeName}}</el-tag>
-								</div>
-							</div>
-							<div class='img'>
-								<img :src='item.pictureUrl' alt=''>
-							</div>
-						</div>
+						<BlogInfoList :data-list='blogList' />
 					</el-card>
 					<div class='page-bar'>
 						<el-pagination background layout="prev, pager, next"
@@ -112,15 +97,15 @@ import { postAction, getAction } from '/@/api/common';
 import { getBlogListApi, getGatewayTypeListApi, getGatewayTagListApi } from '/@/api/blog/blogGateway';
 import { StatusEnum } from '/@/common/status.enum';
 import { PageEntity } from '/@/common/page.entity';
-import { useRouter } from 'vue-router';
+import BlogInfoList from '/@/components/BlogInfoList/index.vue';
 
 export default defineComponent({
 	name: 'gatewayHome',
 	components: {
-		BlogHeader
+		BlogHeader,
+		BlogInfoList
 	},
 	setup() {
-		const router = useRouter();
 		const state = reactive({
 			blogList: [],
 			typeList: [],
@@ -175,11 +160,6 @@ export default defineComponent({
 				}
 			})
 		};
-		const clickBlogTitle = (id: number) => {
-			router.push({
-				path: '/gateway/info/' + id
-			});
-		}
 		onMounted(() => {
 			getBlogList();
 			getTypeList();
@@ -189,8 +169,7 @@ export default defineComponent({
 		return {
 			...toRefs(state),
 			changePageSize,
-			changePageIndex,
-			clickBlogTitle
+			changePageIndex
 		}
 	}
 });
@@ -219,47 +198,6 @@ export default defineComponent({
 			}
 			.page-bar{
 				padding-bottom: 20px;
-			}
-			.info{
-				padding-bottom: 20px;
-				border-bottom: 1px dashed #ccc;
-				padding-top: 20px;
-				&:first-child{
-					padding-top: 0;
-				}
-				.content{
-					flex: 3;
-					padding-right: 20px;
-					.title{
-						color: #373737;
-						font-size: 20px;
-						font-weight: 700;
-						cursor: pointer;
-					}
-					.summary{
-						padding: 10px 0;
-					}
-					.content-footer{
-						.publish-date{
-							color: #ccc;
-							width: 140px;
-							.el-icon{
-								margin-right: 5px;
-							}
-							.view-icon{
-								margin-left: 8px;
-								margin-right: 5px;
-							}
-						}
-					}
-				}
-				.img{
-					flex: 1;
-					img{
-						width: 100%;
-						height: auto;
-					}
-				}
 			}
 			.type-list{
 				border: 1px dashed #ccc;
