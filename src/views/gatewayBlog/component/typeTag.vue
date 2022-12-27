@@ -5,7 +5,7 @@
 				<el-card shadow='never'>
 					<template #header>
 						<div class="card-header flex flex-space-between flex-align-center">
-							<div class='card-header-left'>分类</div>
+							<div class='card-header-left'>{{props.title}}</div>
 							<div class='card-header-right'>
 								共<span>{{ props.dataList.length }}</span>个
 							</div>
@@ -66,6 +66,9 @@
 		blogList: {
 			type: Array,
 			required: true
+		},
+		title: {
+			type: String
 		}
 	});
 

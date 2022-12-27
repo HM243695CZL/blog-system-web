@@ -6,6 +6,7 @@
 							 :current-map='currentTypeMap'
 							 :page-info='pageInfo'
 							 :blog-list='blogList'
+							 :title='"分类"'
 							 @clickTag='clickTag'
 							 @changePageSize='changePageSize'
 							 @changePageIndex='changePageIndex'
