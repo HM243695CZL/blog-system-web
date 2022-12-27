@@ -2,51 +2,14 @@
 	<div class='type-container'>
 		<BlogHeader />
 		<div class='type-content base-width'>
-			<el-row :gutter='20'>
-				<el-col :span='24' :xs='24'>
-					<el-card shadow='never'>
-						<template #header>
-							<div class="card-header flex flex-space-between flex-align-center">
-								<div class='card-header-left'>分类</div>
-								<div class='card-header-right'>
-									共<span>{{ typeList.length }}</span>个
-								</div>
-							</div>
-						</template>
-						<div class='tag-list flex flex-start flex-align-start'>
-							<div :class='["tag-item", "hl-tag", currentTypeMap.id === item.id ? "active" : ""]'
-									 @click='clickTag(item)'
-									 v-for='item in typeList' :key='item.id'>
-								{{item.name}} <span class='tag-number'>{{item.number}}</span>
-							</div>
-						</div>
-					</el-card>
-				</el-col>
-			</el-row>
-			<el-row :gutter='20'>
-				<el-col :span='24' :xs='24'>
-					<el-card shadow='never'>
-						<h3>专栏简介：</h3>
-						<div class='desc'>{{currentTypeMap.desc}}</div>
-					</el-card>
-				</el-col>
-			</el-row>
-			<el-row :gutter='20'>
-				<el-col :span='24' :xs='24'>
-					<el-card shadow='never' v-if='blogList.length > 0'>
-						<BlogInfoList :data-list='blogList' />
-						<div class='page-bar'>
-							<el-pagination background layout="prev, pager, next"
-														 hide-on-single-page
-														 small
-														 @changePageSize='changePageSize'
-														 @changePageIndex='changePageIndex'
-														 :total="pageInfo.totalRecords" />
-						</div>
-					</el-card>
-					<div class='no-data' v-else>暂无数据</div>
-				</el-col>
-			</el-row>
+			<TypeTag :data-list='typeList'
+							 :current-map='currentTypeMap'
+							 :page-info='pageInfo'
+							 :blog-list='blogList'
+							 @clickTag='clickTag'
+							 @changePageSize='changePageSize'
+							 @changePageIndex='changePageIndex'
+			/>
 		</div>
 	</div>
 </template>
@@ -58,13 +21,13 @@ import { getBlogListApi, getGatewayTypeListApi } from '/@/api/blog/blogGateway';
 import { getAction, postAction } from '/@/api/common';
 import { StatusEnum } from '/@/common/status.enum';
 import { PageEntity } from '/@/common/page.entity';
-import BlogInfoList from '/@/components/BlogInfoList/index.vue';
+import TypeTag from '../component/typeTag.vue';
 
 export default defineComponent({
 	name: 'gatewayType',
 	components: {
 		BlogHeader,
-		BlogInfoList
+		TypeTag
 	},
 	setup() {
 		const state = reactive({
@@ -132,61 +95,6 @@ export default defineComponent({
 		overflow-y: auto;
 		.type-content{
 			margin: 30px auto;
-			.el-row{
-				margin-bottom: 20px;
-			}
-			.card-header{
-				.card-header-left{
-					color: #00b5ad;
-					font-weight: 700;
-					font-size: 18px;
-				}
-				.card-header-right{
-					span{
-						color: #f2711c;
-						font-size: 22px;
-					}
-				}
-			}
-			.tag-list{
-				flex-wrap: wrap;
-				.tag-item{
-					color: #999;
-					border-color: #999;
-					cursor: pointer;
-					margin-bottom: 15px;
-					&:before{
-						color: #999;
-						border-color: #999;
-					}
-					&.active{
-						color: #00b5ad;
-						border-color: #00b5ad;
-					}
-				}
-				.tag-number{
-					background: #f2711c;
-					color: #fff;
-					display: inline-block;
-					width: 20px;
-					height: 20px;
-					line-height: 20px;
-					text-align: center;
-					border-radius: 50%;
-				}
-			}
-			.desc{
-				padding-top: 15px;
-				font-size: 18px;
-				color: #00b5ad;
-			}
-			.page-bar{
-				padding: 15px 0;
-			}
-			.no-data{
-				text-align: center;
-				padding: 15px 0;
-			}
 		}
 	}
 </style>
