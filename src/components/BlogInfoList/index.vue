@@ -9,7 +9,7 @@
 						<el-icon><ele-Clock /></el-icon>{{(item.updateTime || '').slice(0, 10)}}
 						<el-icon class='view-icon'><ele-View /></el-icon>{{item.views || 0}}
 					</div>
-					<div class='tag-box'>
+					<div class='tag-box text-over'>
 						<el-tag size='small'>{{item.typeName}}</el-tag>
 						<el-tag size='small' v-if='item.tagsName'>{{item.tagsName}}</el-tag>
 					</div>
@@ -41,6 +41,7 @@
 </script>
 
 <style scoped lang='scss'>
+	@import "../../theme/media/index.scss";
 	.blog-info-list-container{
 		.info{
 			padding-bottom: 20px;
@@ -63,6 +64,7 @@
 				}
 				.content-footer{
 					.publish-date{
+						flex: 1;
 						color: #ccc;
 						width: 140px;
 						.el-icon{
@@ -73,14 +75,22 @@
 							margin-right: 5px;
 						}
 					}
-					.el-tag{
-						margin-left: 10px;
+					.tag-box{
+						.el-tag{
+							margin-left: 10px;
+						}
+					}
+					@media screen and (max-width: $xs){
+						.tag-box{
+							display: none;
+						}
 					}
 				}
 			}
 			.img{
 				flex: 1;
 				img{
+					border-radius: 5px;
 					width: 100%;
 					height: auto;
 				}

@@ -47,7 +47,7 @@
 			:create-path='configObj.createPath'
 			:update-path='configObj.updatePath'
 			:view-path='configObj.viewPath'
-			:modal-width='"1080px"'
+			:modal-width='"80%"'
 			@refreshList='getDataList'
 		>
 			<BlogInfoModal

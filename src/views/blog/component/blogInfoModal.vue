@@ -18,7 +18,7 @@
 								maxlength='100' placeholder='请输入摘要' clearable></el-input>
 		</el-form-item>
 		<el-form-item label='详情' prop='content'>
-			<MdEditor :content='state.ruleForm.content' @editorBlur='editorBlur' />
+			<MdEditor :height='"550px"' :content='state.ruleForm.content' @editorBlur='editorBlur' />
 		</el-form-item>
 		<el-row :gutter='20'>
 			<el-col :span='12'>

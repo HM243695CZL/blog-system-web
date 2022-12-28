@@ -19,8 +19,8 @@
 						<el-pagination background layout="prev, pager, next"
 													 hide-on-single-page
 													 small
-													 @changePageSize='changePageSize'
-													 @changePageIndex='changePageIndex'
+													 @size-change='changePageSize'
+													 @current-change='changePageIndex'
 													 :total="pageInfo.totalRecords" />
 					</div>
 				</el-col>
@@ -78,8 +78,8 @@
 							</div>
 						</template>
 						<div class='recommend-list'>
-							<div class='list-item' v-for='item in recommendBlogList' :key='item.id'>
-								{{item.title}}
+							<div class='list-item' @click='clickBlogTitle(item.id)' v-for='(item, index) in recommendBlogList' :key='item.id'>
+								{{index + 1}}、{{item.title}}
 							</div>
 						</div>
 					</el-card>
@@ -98,6 +98,7 @@ import { getBlogListApi, getGatewayTypeListApi, getGatewayTagListApi } from '/@/
 import { StatusEnum } from '/@/common/status.enum';
 import { PageEntity } from '/@/common/page.entity';
 import BlogInfoList from '/@/components/BlogInfoList/index.vue';
+import { useRouter } from 'vue-router';
 
 export default defineComponent({
 	name: 'gatewayHome',
@@ -106,6 +107,7 @@ export default defineComponent({
 		BlogInfoList
 	},
 	setup() {
+		const router = useRouter();
 		const state = reactive({
 			blogList: [],
 			typeList: [],
@@ -160,6 +162,11 @@ export default defineComponent({
 				}
 			})
 		};
+		const clickBlogTitle = (id: number) => {
+			router.push({
+				path: '/gateway/info/' + id
+			});
+		}
 		onMounted(() => {
 			getBlogList();
 			getTypeList();
@@ -169,7 +176,8 @@ export default defineComponent({
 		return {
 			...toRefs(state),
 			changePageSize,
-			changePageIndex
+			changePageIndex,
+			clickBlogTitle
 		}
 	}
 });
@@ -197,7 +205,7 @@ export default defineComponent({
 				}
 			}
 			.page-bar{
-				padding-bottom: 20px;
+				padding: 20px 0;
 			}
 			.type-list{
 				border: 1px dashed #ccc;
