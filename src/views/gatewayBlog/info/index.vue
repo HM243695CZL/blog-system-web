@@ -6,11 +6,11 @@
 				<el-icon>
 					<ele-Clock />
 				</el-icon>
-				{{(state.blogMap.addTime || '').slice(0, 10)}}
+				{{(state.blogMap.updateTime || '').slice(0, 10)}}
 				<el-icon class='view-icon'>
 					<ele-View />
 				</el-icon>
-				{{state.blogMap.views}}
+				{{state.blogMap.views || 0}}
 			</div>
 			<div class='head-img'>
 				<img :src='state.blogMap.pictureUrl' alt=''>
@@ -30,6 +30,7 @@
 				</div>
 				<div class='md-content'>
 					<MdEditor
+						:height='"100%"'
 						:mode='"preview"'
 						:content='state.blogMap.content' />
 				</div>
@@ -90,7 +91,12 @@
 import { onMounted, reactive } from 'vue';
 	import { useRoute } from 'vue-router';
 	import { getAction, postAction } from '/@/api/common';
-import { getGatewayBlogInfoApi, createCommentApi, getCommentByBlogIdApi } from '/@/api/blog/blogGateway';
+import {
+	getGatewayBlogInfoApi,
+	createCommentApi,
+	getCommentByBlogIdApi,
+	updateBlogViewsApi,
+} from '/@/api/blog/blogGateway';
 	import { StatusEnum } from '/@/common/status.enum';
 	import BlogHeader from '/@/components/BlogHeader/index.vue';
 	import MdEditor from '/@/components/Editor/MdEditor.vue';
@@ -201,10 +207,18 @@ import { ElMessage } from 'element-plus';
 		})
 	};
 
+	// 更新浏览次数
+	const updateBlogViews = async () => {
+		await postAction(updateBlogViewsApi, {
+			id: state.id
+		});
+	}
+
 	onMounted(() => {
 		state.id = route.params.id;
 		getBlogInfo();
 		getComment();
+		updateBlogViews();
 	})
 </script>
 

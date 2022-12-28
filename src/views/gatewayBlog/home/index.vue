@@ -217,10 +217,12 @@ export default defineComponent({
 			.tag-card{
 				margin-top: 20px;
 				.tag-list{
+					flex-wrap: wrap;
 					.tag-item{
 						margin-right: 10px;
 						font-weight: 700;
 						cursor: pointer;
+						margin-bottom: 10px;
 						span{
 							margin-left: 10px;
 						}

@@ -6,10 +6,13 @@
 				<div class='summary'>{{item.summary}}</div>
 				<div class='content-footer flex flex-space-between flex-align-center'>
 					<div class='publish-date flex flex-start flex-align-center'>
-						<el-icon><ele-Clock /></el-icon>{{(item.addTime || '').slice(0, 10)}}
-						<el-icon class='view-icon'><ele-View /></el-icon>{{item.views}}
+						<el-icon><ele-Clock /></el-icon>{{(item.updateTime || '').slice(0, 10)}}
+						<el-icon class='view-icon'><ele-View /></el-icon>{{item.views || 0}}
 					</div>
-					<el-tag size='small'>{{item.typeName}}</el-tag>
+					<div class='tag-box'>
+						<el-tag size='small'>{{item.typeName}}</el-tag>
+						<el-tag size='small' v-if='item.tagsName'>{{item.tagsName}}</el-tag>
+					</div>
 				</div>
 			</div>
 			<div class='img'>
@@ -69,6 +72,9 @@
 							margin-left: 8px;
 							margin-right: 5px;
 						}
+					}
+					.el-tag{
+						margin-left: 10px;
 					}
 				}
 			}
