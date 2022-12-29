@@ -103,6 +103,8 @@ const props = defineProps({
 		})
 	};
 	onMounted(() => {
-		getPolicy();
+		if (props.mode !== 'preview') {
+			getPolicy();
+		}
 	});
 </script>

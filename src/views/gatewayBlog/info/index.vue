@@ -1,6 +1,20 @@
 <template>
 	<div class='blog-info-container'>
 		<BlogHeader />
+		<div class='voice'>
+			<el-icon @click='speakVoice' v-if='state.voiceState === "init"'>
+				<ele-Microphone />
+			</el-icon>
+			<el-icon @click='pauseVoice' v-if='state.voiceState === "play"'>
+				<ele-VideoPause />
+			</el-icon>
+			<el-icon @click='resumeVoice' v-if='state.voiceState === "pause"'>
+				<ele-VideoPlay />
+			</el-icon>
+			<el-icon @click='cancelVoice' v-if='state.voiceState !== "init"'>
+				<ele-Close />
+			</el-icon>
+		</div>
 		<div class='info-content base-width'>
 			<div class='head-date flex flex-start flex-align-center'>
 				<el-icon>
@@ -110,9 +124,12 @@ import { ElMessage } from 'element-plus';
 		name: '',
 		email: '',
 		parentId: '',
-		blogMap: {},
+		blogMap: {} as any,
 		commentList: [],
-		commentFlag: false
+		commentFlag: false,
+		voiceState: 'init',
+		voiceMsg: null as any,
+		synth: null as any
 	});
 
 	// 获取博客详情
@@ -214,6 +231,37 @@ import { ElMessage } from 'element-plus';
 		});
 	}
 
+	// 将对应的实例添加到语音队列
+	const speakVoice = () => {
+		state.voiceMsg = new SpeechSynthesisUtterance();
+		state.voiceMsg.text = state.blogMap.content;
+		state.voiceMsg.lang = 'zh-Cn';
+		state.voiceMsg.rate = 1.5;
+		state.voiceMsg.pitch = 1;
+		state.synth = window.speechSynthesis;
+		state.synth.speak(state.voiceMsg);
+		debug.log(state.voiceState);
+		state.voiceState = 'play';
+	}
+
+	// 删除队列中的所有语音，如果正在播放，则停止播放
+	const cancelVoice = () => {
+		state.synth.cancel(state.voiceMsg);
+		state.voiceState = 'init';
+	}
+
+	// 暂停语音
+	const pauseVoice = () => {
+		state.synth.pause();
+		state.voiceState = 'pause';
+	}
+
+	// 恢复暂停的语音
+	const resumeVoice = () => {
+		state.synth.resume();
+		state.voiceState = 'play';
+	}
+
 	onMounted(() => {
 		state.id = route.params.id;
 		getBlogInfo();
@@ -227,6 +275,16 @@ import { ElMessage } from 'element-plus';
 		width: 100%;
 		height: 100%;
 		overflow-y: auto;
+		.voice{
+			position: fixed;
+			top: 50%;
+			right: 20px;
+			z-index: 999;
+			.el-icon{
+				font-size: 30px;
+				color: #00b5ad;
+			}
+		}
 		.info-content{
 			margin: 0 auto;
 			background: var(--el-color-white);
