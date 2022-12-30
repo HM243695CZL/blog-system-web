@@ -48,6 +48,10 @@
 						:mode='"preview"'
 						:content='state.blogMap.content' />
 				</div>
+				<div class='btn-box'>
+					<el-button size='small' v-if='state.blogMap.prevId' @click='clickPrev'>上一个</el-button>
+					<el-button size='small' v-if='state.blogMap.nextId' @click='clickNext'>下一个</el-button>
+				</div>
 				<div v-if='state.blogMap.isAppreciation' class='appreciation flex flex-space-center flex-align-center'>
 					<div class='appreciation-btn'>赞赏</div>
 				</div>
@@ -240,14 +244,16 @@ import { ElMessage } from 'element-plus';
 		state.voiceMsg.pitch = 1;
 		state.synth = window.speechSynthesis;
 		state.synth.speak(state.voiceMsg);
-		debug.log(state.voiceState);
+		// debug.log(state.voiceState);
 		state.voiceState = 'play';
 	}
 
 	// 删除队列中的所有语音，如果正在播放，则停止播放
 	const cancelVoice = () => {
-		state.synth.cancel(state.voiceMsg);
-		state.voiceState = 'init';
+		if (state.synth) {
+			state.synth.cancel(state.voiceMsg);
+			state.voiceState = 'init';
+		}
 	}
 
 	// 暂停语音
@@ -262,11 +268,27 @@ import { ElMessage } from 'element-plus';
 		state.voiceState = 'play';
 	}
 
-	onMounted(() => {
-		state.id = route.params.id;
+	// 点击上一个
+	const clickPrev = () => {
+		state.id = state.blogMap.prevId;
+		init();
+	}
+
+	// 点击下一个
+	const clickNext = () => {
+		state.id = state.blogMap.nextId;
+		init();
+	}
+	const init = () => {
 		getBlogInfo();
 		getComment();
 		updateBlogViews();
+		cancelVoice();
+	}
+
+	onMounted(() => {
+		state.id = route.params.id;
+		init();
 	})
 </script>
 
@@ -337,6 +359,9 @@ import { ElMessage } from 'element-plus';
 				}
 				.md-content{
 					border: 1px solid #f2f2f2;
+				}
+				.btn-box{
+					padding: 10px 0;
 				}
 				.appreciation{
 					padding: 10px 0;
