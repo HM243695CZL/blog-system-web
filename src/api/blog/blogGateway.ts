@@ -7,3 +7,4 @@ export const getGatewayBlogInfoApi = `${blogGatewayBaseApi}getBlogInfo`;
 export const createCommentApi = `${blogGatewayBaseApi}blog-comment/create`;
 export const getCommentByBlogIdApi = `${blogGatewayBaseApi}getCommentByBlogId`;
 export const updateBlogViewsApi = `${blogGatewayBaseApi}updateBlogViews`;
+export const getListByContentApi = `${blogGatewayBaseApi}getListByContent`;

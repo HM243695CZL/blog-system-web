@@ -10,6 +10,14 @@
 					<el-input v-model="searchParams.title" placeholder="请输入" clearable></el-input>
 				</el-form-item>
 			</template>
+			<template #right>
+				<el-button size='default' type='default' @click='clickSyncData'>
+					<el-icon>
+						<ele-Refresh />
+					</el-icon>
+					同步
+				</el-button>
+			</template>
 		</CommonTop>
 		<vxe-table
 			ref='tableRef'
@@ -66,12 +74,13 @@ import CommonModal from '/@/components/CommonModal/index.vue';
 import BlogInfoModal from './component/blogInfoModal.vue';
 import { onMounted, reactive, ref, toRefs } from 'vue';
 import { createBlogInfoApi, deleteBlogInfoApi,
-	getBlogInfoPageApi, updateBlogInfoApi, viewBlogInfoApi } from '/@/api/blog/blogInfo';
+	getBlogInfoPageApi, updateBlogInfoApi, viewBlogInfoApi, syncBlogDataApi } from '/@/api/blog/blogInfo';
 import { getBlogTypeListApi } from '/@/api/blog/type';
 import { getTagListApi } from '/@/api/blog/tag';
 import useCrud from '/@/hooks/useCrud';
 import { getAction } from '/@/api/common';
 import { StatusEnum } from '/@/common/status.enum';
+import { ElMessage } from 'element-plus';
 export default {
 	name: 'blogInfo',
 	components: {
@@ -110,6 +119,13 @@ export default {
 				}
 			});
 		};
+		const clickSyncData = () => {
+			getAction(syncBlogDataApi, '').then(res => {
+				if (res.status === StatusEnum.SUCCESS) {
+					ElMessage.success(res.message);
+				}
+			});
+		};
 		const {
 			tableRef,
 			modalFormRef,
@@ -136,6 +152,7 @@ export default {
 		});
 		return {
 			blogInfoRef,
+			clickSyncData,
 			...toRefs(state),
 
 			tableRef,

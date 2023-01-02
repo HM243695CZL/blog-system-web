@@ -119,7 +119,6 @@ export default defineComponent({
 			postAction(getBlogListApi, {
 				pageIndex: state.pageInfo.pageIndex,
 				pageSize: state.pageInfo.pageSize,
-				state: true
 			}, false).then(res => {
 				if (res.status === StatusEnum.SUCCESS) {
 					state.blogList = res.data.list;

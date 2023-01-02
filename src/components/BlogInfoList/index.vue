@@ -2,7 +2,7 @@
 	<div class='blog-info-list-container'>
 		<div class='info flex flex-space-between flex-align-center' v-for='item in props.dataList' :key='item.id'>
 			<div class='content'>
-				<div class='title' @click='clickBlogTitle(item.id)'>{{item.title}}</div>
+				<div class='title' @click='clickBlogTitle(item.blogInfoId)'>{{item.title}}</div>
 				<div class='summary'>{{item.summary}}</div>
 				<div class='content-footer flex flex-space-between flex-align-center'>
 					<div class='publish-date flex flex-start flex-align-center'>
