@@ -58,6 +58,9 @@
 					font-size: 20px;
 					font-weight: 700;
 					cursor: pointer;
+					&:hover{
+						color: #00b5ad;
+					}
 				}
 				.summary{
 					padding: 10px 0;

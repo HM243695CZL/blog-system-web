@@ -107,7 +107,7 @@
 
 <script lang='ts' setup>
 import { onMounted, reactive } from 'vue';
-	import { useRoute } from 'vue-router';
+import { onBeforeRouteUpdate, useRoute } from 'vue-router';
 	import { getAction, postAction } from '/@/api/common';
 import {
 	getGatewayBlogInfoApi,
@@ -285,6 +285,11 @@ import { ElMessage } from 'element-plus';
 		updateBlogViews();
 		cancelVoice();
 	}
+
+	onBeforeRouteUpdate(params => {
+		state.id = params.params.id;
+		init();
+	});
 
 	onMounted(() => {
 		state.id = route.params.id;

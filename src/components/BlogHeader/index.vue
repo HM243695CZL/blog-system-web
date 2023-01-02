@@ -14,13 +14,19 @@
 					<div class='login-btn-mobile hidden-sm-and-up' @click='clickLogin'>登录</div>
 				</el-col>
 				<el-col class='search-box hidden-xs-only' :span='12'>
-					<el-input size='small' v-model='state.keywords' placeholder='搜索关键字'>
+					<el-input size='small' v-model='state.keywords' clearable placeholder='搜索关键字' @input='changeKeywords'>
 						<template #append>
-							<el-icon>
+							<el-icon @click='clickKeywords'>
 								<ele-Search />
 							</el-icon>
 						</template>
 					</el-input>
+					<div class='content-list' v-if='state.contentList.length'>
+						<div class='total-tip'>共{{state.contentList.length}}条</div>
+						<div class='list-item text-over' v-for='item in state.contentList' :key='item.blogInfoId' @click='clickBlogTitle(item.blogInfoId)'>
+							<el-tag type='success'>{{item.tagsName}}</el-tag>{{item.title}}
+						</div>
+					</div>
 					<div class='login-btn' @click='clickLogin'>登录后台</div>
 				</el-col>
 			</el-row>
@@ -31,6 +37,9 @@
 <script lang='ts' setup>
 import { useRoute, useRouter } from 'vue-router';
 import { onMounted, reactive } from 'vue';
+import { postAction } from '/@/api/common';
+import { getListByContentApi } from '/@/api/blog/blogGateway';
+import { StatusEnum } from '/@/common/status.enum';
 
 const route = useRoute();
 const router = useRouter();
@@ -42,6 +51,8 @@ const state = reactive({
 	],
 	keywords: '',
 	currentTab: '',
+	contentList: [],
+	timer: null as any
 });
 onMounted(() => {
 	state.currentTab = route.path;
@@ -52,6 +63,37 @@ const clickTopBar = data => {
 const clickLogin = () => {
 	router.push('/login');
 };
+const getContentList = () => {
+	postAction(getListByContentApi, {
+		content: state.keywords
+	}, false).then(res => {
+		if (res.status === StatusEnum.SUCCESS) {
+			state.contentList = res.data;
+		}
+	});
+};
+const changeKeywords = () => {
+	if (state.timer) {
+		clearInterval(state.timer);
+	}
+	state.timer = setTimeout(() => {
+		if (state.keywords) {
+			getContentList();
+		} else {
+			state.contentList = [];
+		}
+	}, 100);
+};
+const clickKeywords = () => {
+	if (state.keywords) {
+		getContentList();
+	}
+};
+const clickBlogTitle = (id: number) => {
+	router.push({
+		path: '/gateway/info/' + id
+	});
+}
 </script>
 
 <style scoped lang='scss'>
@@ -102,6 +144,44 @@ const clickLogin = () => {
 					display: flex;
 					justify-content: space-between;
 					align-items: center;
+					position: relative;
+					.content-list{
+						position: absolute;
+						top: 35px;
+						left: 9px;
+						background: #fff;
+						padding: 12px;
+						border-radius: 0 0 5px 5px;
+						box-shadow: 0 0 15px #ccc;
+						width: 70%;
+						max-height: 382px;
+						overflow-y: scroll;
+						.total-tip{
+							text-align: center;
+							font-size: 12px;
+							color: #ccc;
+						}
+						.list-item{
+							padding: 8px 0;
+							border-bottom: 1px dashed #ccc;
+							cursor: pointer;
+							.el-tag{
+								margin-right: 10px;
+							}
+							&:hover{
+								color: #00b5ad;
+							}
+							&:last-child{
+								border: none;
+							}
+						}
+					}
+					.el-icon{
+						cursor: pointer;
+						&:hover{
+							color: #00b5ad;
+						}
+					}
 					.login-btn{
 						margin-left: 30px;
 						width: 135px;
