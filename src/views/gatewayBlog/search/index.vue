@@ -76,6 +76,7 @@ export default defineComponent({
 		height: 100%;
 		overflow-x: hidden;
 		overflow-y: auto;
+		background: #fff;
 		.search-head{
 			position: sticky;
 			top: 0;
@@ -92,7 +93,6 @@ export default defineComponent({
 		}
 		.info-box{
 			padding: 20px;
-			background: #fff;
 			.total-tip{
 				text-align: center;
 				font-size: 12px;
