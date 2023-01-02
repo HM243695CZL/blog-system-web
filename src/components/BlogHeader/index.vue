@@ -31,6 +31,11 @@
 				</el-col>
 			</el-row>
 		</header>
+		<div class='mobile-search hidden-sm-and-up'>
+			<el-icon @click='clickSearch'>
+				<ele-Search />
+			</el-icon>
+		</div>
 	</div>
 </template>
 
@@ -93,6 +98,11 @@ const clickBlogTitle = (id: number) => {
 	router.push({
 		path: '/gateway/info/' + id
 	});
+};
+const clickSearch = () => {
+	router.push({
+		path: '/gateway/search'
+	})
 }
 </script>
 
@@ -198,6 +208,15 @@ const clickBlogTitle = (id: number) => {
 					}
 				}
 			}
+		}
+	}
+	.mobile-search{
+		position: fixed;
+		top: 42%;
+		right: 20px;
+		.el-icon{
+			font-size: 25px;
+			color: #00b5ad;
 		}
 	}
 </style>
