@@ -23,6 +23,7 @@ import TypeTag from '../component/typeTag.vue';
 import { getAction, postAction } from '/@/api/common';
 import { getBlogListApi, getGatewayTagListApi } from '/@/api/blog/blogGateway';
 import { StatusEnum } from '/@/common/status.enum';
+import { useRoute } from 'vue-router';
 
 export default defineComponent({
 	name: 'gatewayTag',
@@ -31,19 +32,30 @@ export default defineComponent({
 		TypeTag
 	},
 	setup() {
+		const route = useRoute();
 		const state = reactive({
-			tagList: [],
+			tagList: [] as any,
 			currentTagMap: {} as any,
 			pageInfo: new PageEntity(),
-			blogList: []
+			blogList: [],
+			routeId: '' as any
 		});
 		const getTagList = () => {
 			getAction(getGatewayTagListApi, '').then(res => {
 				if (res.status === StatusEnum.SUCCESS) {
 					state.tagList = res.data;
 					if (state.tagList.length) {
-						state.currentTagMap = state.tagList[0];
-						getBlogList();
+						if (state.routeId) {
+							state.tagList.map(item => {
+								if (item.id === ~~state.routeId) {
+									state.currentTagMap = item;
+									getBlogList();
+								}
+							})
+						} else {
+							state.currentTagMap = state.tagList[0];
+							getBlogList();
+						}
 					}
 				}
 			})
@@ -77,6 +89,7 @@ export default defineComponent({
 		};
 		onMounted(() => {
 			getTagList();
+			state.routeId = route.query.id;
 		});
 		return {
 			...toRefs(state),

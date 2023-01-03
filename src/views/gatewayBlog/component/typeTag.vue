@@ -37,8 +37,8 @@
 						<el-pagination background layout="prev, pager, next"
 													 hide-on-single-page
 													 small
-													 @changePageSize='changePageSize'
-													 @changePageIndex='changePageIndex'
+													 @size-change='changePageSize'
+													 @current-change='changePageIndex'
 													 :total="props.pageInfo.totalRecords" />
 					</div>
 				</el-card>

@@ -23,6 +23,7 @@ import { getAction, postAction } from '/@/api/common';
 import { StatusEnum } from '/@/common/status.enum';
 import { PageEntity } from '/@/common/page.entity';
 import TypeTag from '../component/typeTag.vue';
+import { useRoute } from 'vue-router';
 
 export default defineComponent({
 	name: 'gatewayType',
@@ -31,19 +32,30 @@ export default defineComponent({
 		TypeTag
 	},
 	setup() {
+		const route = useRoute();
 		const state = reactive({
-			typeList: [],
+			typeList: [] as any,
 			currentTypeMap: {} as any,
 			pageInfo: new PageEntity(),
-			blogList: []
+			blogList: [],
+			routeId: '' as any
 		});
 		const getTypeList = () => {
 			getAction(getGatewayTypeListApi, '').then(res => {
 				if (res.status === StatusEnum.SUCCESS) {
 					state.typeList = res.data;
 					if (state.typeList.length) {
-						state.currentTypeMap = state.typeList[0];
-						getBlogList();
+						if (state.routeId) {
+							state.typeList.map(item => {
+								if (item.id === ~~state.routeId) {
+									state.currentTypeMap = item;
+									getBlogList();
+								}
+							})
+						} else {
+							state.currentTypeMap = state.typeList[0];
+							getBlogList();
+						}
 					}
 				}
 			});
@@ -77,6 +89,7 @@ export default defineComponent({
 		};
 		onMounted(() => {
 			getTypeList();
+			state.routeId = route.query.id;
 		});
 		return {
 			...toRefs(state),

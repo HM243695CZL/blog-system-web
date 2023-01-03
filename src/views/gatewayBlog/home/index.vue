@@ -9,7 +9,7 @@
 							<div class="card-header card-header-blog flex flex-space-between flex-align-center">
 								<div class='card-header-left'>博客</div>
 								<div class='card-header-right'>
-									共<span>{{pageInfo.totalRecords}}</span>篇
+									共<span class='number'>{{pageInfo.totalRecords}}</span>篇
 								</div>
 							</div>
 						</template>
@@ -35,12 +35,14 @@
 									分类
 								</div>
 								<div class='card-header-right'>
-									更多
+									<span class='more' @click='clickMore("type")'>更多</span>
 								</div>
 							</div>
 						</template>
 						<div class='type-list'>
-							<div class='list-item flex flex-space-between flex-align-center' v-for='item in typeList.slice(0, 6)' :key='item.id'>
+							<div class='list-item flex flex-space-between flex-align-center'
+									 @click='clickTypeItem(item.id)'
+									 v-for='item in typeList.slice(0, 6)' :key='item.id'>
 								{{item.name}}
 								<div class='type-number hl-tag'>{{item.number}}</div>
 							</div>
@@ -56,12 +58,12 @@
 									标签
 								</div>
 								<div class='card-header-right'>
-									更多
+									<span class='more' @click='clickMore("tag")'>更多</span>
 								</div>
 							</div>
 						</template>
 						<div class='tag-list flex flex-start flex-align-center'>
-							<div class='hl-tag tag-item' v-for='item in tagList.slice(0, 10)' :key='item.id'>
+							<div class='hl-tag tag-item' v-for='item in tagList.slice(0, 10)' :key='item.id' @click='clickTagItem(item.id)'>
 								{{item.name}} <span>{{item.number}}</span>
 							</div>
 						</div>
@@ -78,7 +80,7 @@
 							</div>
 						</template>
 						<div class='recommend-list'>
-							<div class='list-item' @click='clickBlogTitle(item.id)' v-for='(item, index) in recommendBlogList' :key='item.id'>
+							<div class='list-item' @click='clickBlogTitle(item.blogInfoId)' v-for='(item, index) in recommendBlogList' :key='item.blogInfoId'>
 								{{index + 1}}、{{item.title}}
 							</div>
 						</div>
@@ -165,6 +167,27 @@ export default defineComponent({
 			router.push({
 				path: '/gateway/info/' + id
 			});
+		};
+		const clickTypeItem = (id: number) => {
+			router.push({
+				path: '/gateway/type',
+				query: {
+					id
+				}
+			});
+		};
+		const clickTagItem = (id: number) => {
+			router.push({
+				path: '/gateway/tag',
+				query: {
+					id
+				}
+			})
+		};
+		const clickMore = mode => {
+			router.push({
+				path: '/gateway/' + mode
+			});
 		}
 		onMounted(() => {
 			getBlogList();
@@ -176,7 +199,10 @@ export default defineComponent({
 			...toRefs(state),
 			changePageSize,
 			changePageIndex,
-			clickBlogTitle
+			clickBlogTitle,
+			clickTypeItem,
+			clickTagItem,
+			clickMore
 		}
 	}
 });
@@ -190,14 +216,21 @@ export default defineComponent({
 		overflow-y: auto;
 		.home-content{
 			margin: 30px auto;
-			.card-header-blog{
+			.card-header-blog, .card-header-classify, .card-header-tag{
 				.card-header-left{
 					color: #00b5ad;
 					font-weight: 700;
 					font-size: 18px;
 				}
 				.card-header-right{
-					span{
+					.more{
+						cursor: pointer;
+						font-size: 12px;
+						&:hover{
+							color: #00b5ad;
+						}
+					}
+					.number{
 						color: #f2711c;
 						font-size: 22px;
 					}
