@@ -92,6 +92,7 @@ import SingleUpload from '/@/components/Upload/SingleUpload.vue';
 
 	const state = reactive({
 		ruleForm: {
+			blogInfoId: '',
 			title: '',
 			property: 1,
 			summary: '',

@@ -23,7 +23,7 @@
 			ref='tableRef'
 			:row-config='{
 				useKey: true,
-				keyField: "id"
+				keyField: "blogInfoId"
 			}'
 			:data='dataList'
 			:max-height='tableHeight'
@@ -31,7 +31,7 @@
 			<vxe-column type='seq' title='序号' width='60' />
 			<vxe-column title='标题' field='title' />
 			<vxe-column title='分类' field='typeName' />
-			<vxe-column title='添加时间' field='addTime' />
+			<vxe-column title='添加时间' field='addTime' formatter='formatDate' />
 			<vxe-column title='状态' field='state'>
 				<template #default='scope'>
 					<el-tag :type='scope.row.state ? "success" : "info"'>{{scope.row.state ? '已发布' : '未发布'}}</el-tag>
@@ -39,8 +39,8 @@
 			</vxe-column>
 			<vxe-column title="操作" width="200">
 				<template #default="scope">
-					<el-button size='small' type='default' @click="clickEdit(scope.row.id)">修改</el-button>
-					<el-button size='small' type='danger' @click="clickDelete(scope.row.id)">删除</el-button>
+					<el-button size='small' type='default' @click="clickEdit(scope.row.blogInfoId)">修改</el-button>
+					<el-button size='small' type='danger' @click="clickDelete(scope.row.blogInfoId)">删除</el-button>
 				</template>
 			</vxe-column>
 		</vxe-table>
